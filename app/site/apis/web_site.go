@@ -62,8 +62,6 @@ func (w WebSite) Upload(c *gin.Context) {
 		w.Error(500, err, fmt.Sprintf("上传文件，\r\n失败信息 %s", err.Error()))
 		return
 	}
-
 	// 返回结果
-
 	w.OK(response, "上传成功")
 }

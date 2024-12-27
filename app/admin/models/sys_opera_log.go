@@ -75,6 +75,10 @@ func SaveOperaLog(message storage.Messager) (err error) {
 		return nil
 	}
 	// 超出100个字符返回值截断
+	if len(l.OperParam) > 100 {
+		l.OperParam = l.OperParam[:100]
+	}
+	// 超出100个字符返回值截断
 	if len(l.JsonResult) > 100 {
 		l.JsonResult = l.JsonResult[:100]
 	}

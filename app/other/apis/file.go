@@ -1,10 +1,12 @@
 package apis
 
 import (
+	"bytes"
 	"encoding/base64"
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -62,6 +64,13 @@ func (e File) UploadFile(c *gin.Context) {
 		return
 	case "3": // base64
 		fileResponse = e.baseImg(c, fileResponse, urlPrefix)
+		e.OK(fileResponse, "上传成功")
+	case "4": // pdf
+		var done bool
+		fileResponse, done = e.uploadPDF(c, fileResponse, urlPrefix)
+		if done {
+			return
+		}
 		e.OK(fileResponse, "上传成功")
 	default:
 		var done bool
@@ -180,6 +189,69 @@ func (e File) singleFile(c *gin.Context, fileResponse FileResponse, urlPerfix st
 	//}
 	fileResponse.Path = "/static/uploadfile/" + fileName
 	fileResponse.FullPath = "/static/uploadfile/" + fileName
+	return fileResponse, false
+}
+
+func (e File) uploadPDF(c *gin.Context, fileResponse FileResponse, urlPrefix string) (FileResponse, bool) {
+	// 获取上传的文件
+	files, err := c.FormFile("file")
+	if err != nil {
+		e.Error(200, errors.New(""), "文件不能为空")
+		return FileResponse{}, true
+	}
+
+	// 验证文件类型
+	if !strings.HasSuffix(strings.ToLower(files.Filename), ".pdf") {
+		e.Error(200, errors.New(""), "只支持PDF文件上传")
+		return FileResponse{}, true
+	}
+
+	// 生成唯一文件名
+	guid := uuid.New().String()
+	fileName := guid + ".pdf"
+
+	// 确保目录存在
+	err = utils.IsNotExistMkDir(path)
+	if err != nil {
+		e.Error(500, errors.New(""), "初始化文件路径失败")
+		return FileResponse{}, true
+	}
+
+	// 保存文件
+	pdfFile := path + fileName
+	err = c.SaveUploadedFile(files, pdfFile)
+	if err != nil {
+		e.Error(500, errors.New(""), "保存PDF文件失败")
+		return FileResponse{}, true
+	}
+
+	// 验证文件是否为有效的PDF
+	file, err := os.Open(pdfFile)
+	if err != nil {
+		e.Error(500, errors.New(""), "读取PDF文件失败")
+		return FileResponse{}, true
+	}
+	defer file.Close()
+
+	// 读取文件头部来验证PDF格式
+	buffer := make([]byte, 4)
+	_, err = file.Read(buffer)
+	if err != nil || !bytes.HasPrefix(buffer, []byte("%PDF")) {
+		// 如果不是有效的PDF文件，删除已上传的文件
+		os.Remove(pdfFile)
+		e.Error(200, errors.New(""), "上传的文件不是有效的PDF格式")
+		return FileResponse{}, true
+	}
+
+	// 构建响应
+	fileResponse = FileResponse{
+		Size:     pkg.GetFileSize(pdfFile),
+		Path:     "/static/uploadfile/" + fileName,
+		FullPath: "/static/uploadfile/" + fileName,
+		Name:     files.Filename,
+		Type:     "application/pdf",
+	}
+
 	return fileResponse, false
 }
 
