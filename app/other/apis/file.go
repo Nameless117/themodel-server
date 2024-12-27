@@ -187,8 +187,8 @@ func (e File) singleFile(c *gin.Context, fileResponse FileResponse, urlPerfix st
 	//	e.Error(200, errors.New(""), "上传第三方失败")
 	//	return FileResponse{}, true
 	//}
-	fileResponse.Path = "/static/uploadfile/" + fileName
-	fileResponse.FullPath = "/static/uploadfile/" + fileName
+	//fileResponse.Path = "/static/uploadfile/" + fileName
+	//fileResponse.FullPath = "/static/uploadfile/" + fileName
 	return fileResponse, false
 }
 
@@ -242,12 +242,17 @@ func (e File) uploadPDF(c *gin.Context, fileResponse FileResponse, urlPrefix str
 		e.Error(200, errors.New(""), "上传的文件不是有效的PDF格式")
 		return FileResponse{}, true
 	}
+	err = utils.IsNotExistMkDir(path)
+	if err != nil {
+		e.Error(500, errors.New(""), "初始化文件路径失败")
+	}
+	singleFile := path + fileName
 
 	// 构建响应
 	fileResponse = FileResponse{
 		Size:     pkg.GetFileSize(pdfFile),
-		Path:     "/static/uploadfile/" + fileName,
-		FullPath: "/static/uploadfile/" + fileName,
+		Path:     singleFile,
+		FullPath: urlPrefix + singleFile,
 		Name:     files.Filename,
 		Type:     "application/pdf",
 	}
