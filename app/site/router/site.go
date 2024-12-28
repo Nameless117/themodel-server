@@ -17,7 +17,7 @@ func registerWebSiteConfigRouter(v1 *gin.RouterGroup) {
 	r := v1.Group("/site")
 	{
 		r.GET("/info", api.GetInfo)
-		r.GET("/content", api.GetContent)
+		r.GET("/content/:type", api.GetContent)
 	}
 }
 

@@ -6,6 +6,7 @@ import (
 	"github.com/go-admin-team/go-admin-core/sdk/api"
 	_ "github.com/go-admin-team/go-admin-core/sdk/pkg/response"
 	"go-admin/app/site/service"
+	"go-admin/app/site/service/dto"
 )
 
 type WebSite struct {
@@ -13,9 +14,11 @@ type WebSite struct {
 }
 
 func (w WebSite) GetContent(c *gin.Context) {
+	req := dto.SysApiGetReq{}
 	s := service.WebSite{}
 	err := w.MakeContext(c).
 		MakeOrm().
+		Bind(&req, nil).
 		MakeService(&s.Service).
 		Errors
 	if err != nil {
@@ -24,7 +27,7 @@ func (w WebSite) GetContent(c *gin.Context) {
 		return
 	}
 	//
-	object, err := s.GetContent()
+	object, err := s.GetContent(req.Type)
 	if err != nil {
 		w.Error(500, err, fmt.Sprintf("获取数据，\r\n失败信息 %s", err.Error()))
 		return

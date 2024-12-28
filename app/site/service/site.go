@@ -366,10 +366,10 @@ type SiteData struct {
 }
 
 // GetContent 获取SysSiteContent对象
-func (w *WebSite) GetContent() ([]*models.SysSiteContent, error) {
-	var list []*models.SysSiteContent
+func (w *WebSite) GetContent(typ string) (*models.SysSiteContent, error) {
+	var res models.SysSiteContent
 
-	err := w.Orm.Model(&models.SysSiteContent{}).Scopes().Find(&list).Error
+	err := w.Orm.Model(&models.SysSiteContent{}).Scopes().Where("type = ?", typ).First(&res).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		err = errors.New("查看对象不存在")
 		return nil, err
@@ -378,5 +378,5 @@ func (w *WebSite) GetContent() ([]*models.SysSiteContent, error) {
 		w.Log.Errorf("db error:%s", err)
 		return nil, err
 	}
-	return list, nil
+	return &res, nil
 }
