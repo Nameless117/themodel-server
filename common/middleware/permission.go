@@ -21,7 +21,7 @@ func AuthCheckRole() gin.HandlerFunc {
 		var res, casbinExclude bool
 		var err error
 		//检查权限
-		if v["rolekey"] == "admin" {
+		if v["rolekey"] == "admin" || v["rolekey"] == "super" {
 			res = true
 			c.Next()
 			return
