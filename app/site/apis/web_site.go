@@ -7,6 +7,7 @@ import (
 	_ "github.com/go-admin-team/go-admin-core/sdk/pkg/response"
 	"go-admin/app/site/service"
 	"go-admin/app/site/service/dto"
+	"path/filepath"
 )
 
 type WebSite struct {
@@ -56,35 +57,23 @@ func (w WebSite) GetInfo(c *gin.Context) {
 	w.OK(object, "查询成功")
 }
 
-func (w WebSite) Upload(c *gin.Context) {
-
-	// 获取上传文件
-	file, err := c.FormFile("file")
-	if err != nil {
-		w.Error(400, err, "获取上传文件失败")
+// GetPDFPreview 获取 PDF 预览图
+func (w WebSite) GetPDFPreview(c *gin.Context) {
+	// 1. 获取 PDF 相对路径
+	pdfPath := c.Param("path")
+	if pdfPath == "" {
+		w.Error(400, nil, "PDF path is required")
 		return
 	}
-	// 创建上传器实例，设置不同文件类型的限制
-	uploader := NewLocalUploader(UploadConfig{
-		SavePath: "./uploads",
-		FileTypeLimits: map[string]FileTypeLimit{
-			"image": {
-				Extensions: []string{".jpg", ".jpeg", ".png", ".gif"},
-				MaxSize:    10 * 1024 * 1024, // 10MB
-			},
-			"pdf": {
-				Extensions: []string{".pdf"},
-				MaxSize:    50 * 1024 * 1024, // 50MB
-			},
-		},
-	})
-
-	// 上传文件
-	response, err := uploader.Upload(file)
+	// 2. 生成或获取预览图
+	h := NewPDFService("static/pdffile/", "static/pdffile/preview/")
+	previewName, err := h.GetPreview(pdfPath)
 	if err != nil {
-		w.Error(500, err, fmt.Sprintf("上传文件，\r\n失败信息 %s", err.Error()))
+		w.Error(500, err, fmt.Sprintf("Failed to generate preview: %s", err.Error()))
 		return
 	}
-	// 返回结果
-	w.OK(response, "上传成功")
+
+	// 3. 返回预览图
+	previewPath := filepath.Join(h.CachePath, previewName)
+	c.File(previewPath)
 }

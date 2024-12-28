@@ -16,5 +16,6 @@ func registerFileRouter(v1 *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddlewar
 	r := v1.Group("").Use(authMiddleware.MiddlewareFunc())
 	{
 		r.POST("/public/uploadFile", api.UploadFile)
+		//r.GET("/pdf/preview/*path", api.GetPDFPreview)
 	}
 }
