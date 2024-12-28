@@ -364,3 +364,19 @@ type SiteData struct {
 	Subscription Subscription `json:"subscription"`
 	Footer       Footer       `json:"footer"`
 }
+
+// GetContent 获取SysSiteContent对象
+func (w *WebSite) GetContent() ([]*models.SysSiteContent, error) {
+	var list []*models.SysSiteContent
+
+	err := w.Orm.Model(&models.SysSiteContent{}).Scopes().Find(&list).Error
+	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
+		err = errors.New("查看对象不存在")
+		return nil, err
+	}
+	if err != nil {
+		w.Log.Errorf("db error:%s", err)
+		return nil, err
+	}
+	return list, nil
+}

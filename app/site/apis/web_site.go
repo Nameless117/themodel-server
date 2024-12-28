@@ -12,6 +12,26 @@ type WebSite struct {
 	api.Api
 }
 
+func (w WebSite) GetContent(c *gin.Context) {
+	s := service.WebSite{}
+	err := w.MakeContext(c).
+		MakeOrm().
+		MakeService(&s.Service).
+		Errors
+	if err != nil {
+		w.Logger.Error(err)
+		w.Error(500, err, err.Error())
+		return
+	}
+	//
+	object, err := s.GetContent()
+	if err != nil {
+		w.Error(500, err, fmt.Sprintf("获取数据，\r\n失败信息 %s", err.Error()))
+		return
+	}
+
+	w.OK(object, "查询成功")
+}
 func (w WebSite) GetInfo(c *gin.Context) {
 	s := service.WebSite{}
 	err := w.MakeContext(c).
