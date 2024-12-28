@@ -3,9 +3,7 @@ package apis
 import (
 	"fmt"
 	"github.com/disintegration/imaging"
-	"github.com/gen2brain/go-fitz" // 使用 go-fitz 库处理 PDF
 	"image"
-	"image/jpeg"
 	"os"
 	"path/filepath"
 )
@@ -42,32 +40,32 @@ func (s *PDFService) GeneratePreview(pdfPath string) (string, error) {
 	}
 
 	// 5. 打开 PDF 文件
-	doc, err := fitz.New(fullPDFPath)
-	if err != nil {
-		return "", fmt.Errorf("failed to open PDF: %v", err)
-	}
-	defer doc.Close()
-
-	// 6. 只获取第一页
-	img, err := doc.Image(0)
-	if err != nil {
-		return "", fmt.Errorf("failed to extract image: %v", err)
-	}
-
-	// 7. 调整图片大小（可选）
-	resizedImg := resize(img, 800) // 假设宽度调整为 800px
-
-	// 8. 保存为 JPEG
-	out, err := os.Create(previewPath)
-	if err != nil {
-		return "", fmt.Errorf("failed to create preview file: %v", err)
-	}
-	defer out.Close()
-
-	err = jpeg.Encode(out, resizedImg, &jpeg.Options{Quality: 85})
-	if err != nil {
-		return "", fmt.Errorf("failed to encode preview image: %v", err)
-	}
+	//doc, err := fitz.New(fullPDFPath)
+	//if err != nil {
+	//	return "", fmt.Errorf("failed to open PDF: %v", err)
+	//}
+	//defer doc.Close()
+	//
+	//// 6. 只获取第一页
+	//img, err := doc.Image(0)
+	//if err != nil {
+	//	return "", fmt.Errorf("failed to extract image: %v", err)
+	//}
+	//
+	//// 7. 调整图片大小（可选）
+	//resizedImg := resize(img, 800) // 假设宽度调整为 800px
+	//
+	//// 8. 保存为 JPEG
+	//out, err := os.Create(previewPath)
+	//if err != nil {
+	//	return "", fmt.Errorf("failed to create preview file: %v", err)
+	//}
+	//defer out.Close()
+	//
+	//err = jpeg.Encode(out, resizedImg, &jpeg.Options{Quality: 85})
+	//if err != nil {
+	//	return "", fmt.Errorf("failed to encode preview image: %v", err)
+	//}
 
 	return previewName, nil
 }
