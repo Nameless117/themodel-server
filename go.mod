@@ -12,7 +12,6 @@ require (
 	github.com/bytedance/go-tagexpr/v2 v2.9.11
 	github.com/casbin/casbin/v2 v2.77.2
 	github.com/disintegration/imaging v1.6.2
-	github.com/gen2brain/go-fitz v1.24.14
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-admin-team/go-admin-core v1.5.2-0.20231103105356-84418ed9252c
 	github.com/go-admin-team/go-admin-core/sdk v1.5.2-0.20231103105356-84418ed9252c
@@ -63,7 +62,6 @@ require (
 	github.com/coreos/go-semver v0.3.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/ebitengine/purego v0.8.0 // indirect
 	github.com/fatih/color v1.15.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
@@ -103,7 +101,6 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/jupiterrider/ffi v0.2.0 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
 	github.com/kyokomi/emoji/v2 v2.2.11 // indirect
