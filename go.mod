@@ -1,6 +1,8 @@
 module go-admin
 
-go 1.21
+go 1.22
+
+toolchain go1.23.4
 
 require (
 	github.com/alibaba/sentinel-golang v1.0.4
@@ -9,6 +11,7 @@ require (
 	github.com/bitly/go-simplejson v0.5.1
 	github.com/bytedance/go-tagexpr/v2 v2.9.11
 	github.com/casbin/casbin/v2 v2.77.2
+	github.com/disintegration/imaging v1.6.2
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-admin-team/go-admin-core v1.5.2-0.20231103105356-84418ed9252c
 	github.com/go-admin-team/go-admin-core/sdk v1.5.2-0.20231103105356-84418ed9252c

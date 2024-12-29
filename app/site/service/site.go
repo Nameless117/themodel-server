@@ -267,7 +267,7 @@ func (w *WebSite) GetFooter() (*models.SysSiteFooterConfig, error) {
 func (w *WebSite) GetMenuItems() ([]*models.SysSiteMenuItems, error) {
 	var list []*models.SysSiteMenuItems
 
-	err := w.Orm.Model(&models.SysSiteMenuItems{}).Scopes().Order("sortOrder ASC").Find(&list).Error
+	err := w.Orm.Model(&models.SysSiteMenuItems{}).Scopes().Order("sort_order ASC").Find(&list).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		err = errors.New("查看对象不存在")
 		return nil, err
@@ -299,7 +299,7 @@ func (w *WebSite) GetSubConfig() (*models.SysSiteSubscriptionConfig, error) {
 func (w *WebSite) GetLinks() ([]*models.SysSiteSubscriptionLinks, error) {
 	var list []*models.SysSiteSubscriptionLinks
 
-	err := w.Orm.Model(&models.SysSiteSubscriptionLinks{}).Scopes().Order("sortOrder ASC").Find(&list).Error
+	err := w.Orm.Model(&models.SysSiteSubscriptionLinks{}).Scopes().Order("sort_order ASC").Find(&list).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		err = errors.New("查看对象不存在")
 		return nil, err
@@ -363,4 +363,20 @@ type SiteData struct {
 	AudioBanner  AudioBanner  `json:"audioBanner"`
 	Subscription Subscription `json:"subscription"`
 	Footer       Footer       `json:"footer"`
+}
+
+// GetContent 获取SysSiteContent对象
+func (w *WebSite) GetContent(typ string) (*models.SysSiteContent, error) {
+	var res models.SysSiteContent
+
+	err := w.Orm.Model(&models.SysSiteContent{}).Scopes().Where("type = ?", typ).First(&res).Error
+	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
+		err = errors.New("查看对象不存在")
+		return nil, err
+	}
+	if err != nil {
+		w.Log.Errorf("db error:%s", err)
+		return nil, err
+	}
+	return &res, nil
 }
