@@ -1,7 +1,6 @@
 package dto
 
 import (
-	"fmt"
 	"go-admin/app/site/models"
 	"go-admin/common/dto"
 	common "go-admin/common/models"
@@ -29,11 +28,12 @@ func (m *SysSiteContentGetPageReq) GetNeedSearch() interface{} {
 }
 
 type SysSiteContentInsertReq struct {
-	Id         int                   `json:"-" comment:""` //
-	Type       string                `json:"type" comment:"内容类型：首页/关于/有声读物"`
-	Title      string                `json:"title" comment:"内容名称"`
-	Content    string                `json:"content" comment:"富文本内容"`
-	SubContent models.SubContentJSON `json:"subContent" comment:"附近内容"`
+	Id          int                   `json:"-" comment:""` //
+	Type        string                `json:"type" comment:"内容类型：首页/关于/有声读物"`
+	Title       string                `json:"title" comment:"内容名称"`
+	Content     string                `json:"content" comment:"富文本内容"`
+	HtmlContent string                `json:"htmlContent" comment:"富文本内容"`
+	SubContent  models.SubContentJSON `json:"subContent" comment:"附近内容"`
 	common.ControlBy
 }
 
@@ -45,6 +45,7 @@ func (s *SysSiteContentInsertReq) Generate(model *models.SysSiteContent) {
 	model.Type = s.Type
 	model.Title = s.Title
 	model.Content = s.Content
+	model.HtmlContent = s.HtmlContent
 	model.SubContent = s.SubContent
 	model.CreateBy = s.CreateBy // 添加这而，需要记录是被谁创建的
 }
@@ -54,11 +55,12 @@ func (s *SysSiteContentInsertReq) GetId() interface{} {
 }
 
 type SysSiteContentUpdateReq struct {
-	Id         int                   `uri:"id" comment:""` //
-	Type       string                `json:"type" comment:"内容类型：首页/关于/有声读物"`
-	Title      string                `json:"title" comment:"内容名称"`
-	Content    string                `json:"content" comment:"富文本内容"`
-	SubContent models.SubContentJSON `json:"subContent" comment:"附近内容"`
+	Id          int                   `uri:"id" comment:""` //
+	Type        string                `json:"type" comment:"内容类型：首页/关于/有声读物"`
+	Title       string                `json:"title" comment:"内容名称"`
+	Content     string                `json:"content" comment:"富文本内容"`
+	HtmlContent string                `json:"htmlContent" comment:"富文本内容"`
+	SubContent  models.SubContentJSON `json:"subContent" comment:"附近内容"`
 	common.ControlBy
 }
 
@@ -66,12 +68,10 @@ func (s *SysSiteContentUpdateReq) Generate(model *models.SysSiteContent) {
 	if s.Id == 0 {
 		model.Model = common.Model{Id: s.Id}
 	}
-
-	fmt.Println("=======", s.SubContent)
-
 	model.Type = s.Type
 	model.Title = s.Title
 	model.Content = s.Content
+	model.HtmlContent = s.HtmlContent
 	model.SubContent = s.SubContent
 	model.UpdateBy = s.UpdateBy // 添加这而，需要记录是被谁更新的
 }
