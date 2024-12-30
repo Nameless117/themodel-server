@@ -36,7 +36,7 @@ func (w WebSite) GetContent(c *gin.Context) {
 	if object.HtmlContent != "" && len(object.HtmlContent) > 10 {
 		object.Content = object.HtmlContent
 	}
-
+	object.HtmlContent = ""
 	w.OK(object, "查询成功")
 }
 func (w WebSite) GetInfo(c *gin.Context) {
