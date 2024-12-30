@@ -38,6 +38,7 @@ func (w *WebSite) Get() (*SiteData, error) {
 			mu.Lock()
 			result.LogoLarge = config.LogoLarge
 			result.LogoSmall = config.LogoSmall
+			result.LogoSmallAddr = config.LogoSmallAddr
 			result.BannerBgImg = config.BannerBgImg
 			result.BannerBook = config.BannerBook
 			mu.Unlock()
@@ -354,15 +355,16 @@ type Footer struct {
 
 // SiteData 是顶层结构，表示所有的配置数据
 type SiteData struct {
-	LogoLarge    string       `json:"logoLarge"`
-	LogoSmall    string       `json:"logoSmall"`
-	BannerBgImg  string       `json:"bannerBgImg"`
-	BannerBook   string       `json:"bannerBook"`
-	MenuList     []MenuItem   `json:"menuList"`
-	HomeBanner   Banner       `json:"homeBanner"`
-	AudioBanner  AudioBanner  `json:"audioBanner"`
-	Subscription Subscription `json:"subscription"`
-	Footer       Footer       `json:"footer"`
+	LogoLarge     string       `json:"logoLarge"`
+	LogoSmall     string       `json:"logoSmall"`
+	LogoSmallAddr string       `json:"logoSmallAddr"`
+	BannerBgImg   string       `json:"bannerBgImg"`
+	BannerBook    string       `json:"bannerBook"`
+	MenuList      []MenuItem   `json:"menuList"`
+	HomeBanner    Banner       `json:"homeBanner"`
+	AudioBanner   AudioBanner  `json:"audioBanner"`
+	Subscription  Subscription `json:"subscription"`
+	Footer        Footer       `json:"footer"`
 }
 
 // GetContent 获取SysSiteContent对象
