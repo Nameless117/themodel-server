@@ -33,6 +33,9 @@ func (w WebSite) GetContent(c *gin.Context) {
 		w.Error(500, err, fmt.Sprintf("获取数据，\r\n失败信息 %s", err.Error()))
 		return
 	}
+	if object.HtmlContent != "" && len(object.HtmlContent) > 10 {
+		object.Content = object.HtmlContent
+	}
 
 	w.OK(object, "查询成功")
 }
